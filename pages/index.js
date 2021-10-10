@@ -16,7 +16,7 @@ export default function Home({pokemons}) {
           <ul>
             { pokemons.map(pokemon => {
               return <li key={pokemon.number}>
-                <Link href={`/pokemon?id=${pokemon.number}`}>
+                <Link href={`/pokemon?id=${pokemon.id}`}>
                   <a title={pokemon.name} className="pokebox border p-4 border-gray my-2 flex items-center text-lg rounded-md bg-gray-200 hover:bg-gray-300">
                     <img src={pokemon.image} alt={pokemon.name} className="w-20 h-20 mr-3"/>
                     <div>
@@ -34,7 +34,7 @@ export default function Home({pokemons}) {
       {/* still beyond the power of standard tailwind */}
       <style>{`
         .pokebox img { transition: transform ease 0.15s; }
-        .pokebox:hover img { transform: rotate(12deg); }
+        .pokebox:hover img { transform: rotate(12deg);}
       `}</style>
     </Layout>
   )
@@ -48,9 +48,10 @@ export async function getStaticProps(context) {
     const {results} = await data.json()
     const pokemons = results.map((result, index) => {
       const number = ('00' + (index + 1)).slice(-3);
+      const id = index + 1;
       const name = result.name[0].toUpperCase() + result.name.slice(1);
       const image = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${number}.png`
-      return {...result, number, image, name}
+      return {...result, number, image, name, id}
     })
     return {
       props: {pokemons}
